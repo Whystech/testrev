@@ -1,0 +1,61 @@
+{{> menu active="dashboard"}}
+<br>
+
+
+<section class="content section p-1 background-is-black">
+  {{> record-button}}
+  <div class="box" style="height: 45vh" id="map1"></div>
+  {{> list-trips}}
+  <canvas id='gauge'></canvas>
+  <p>{{speedNumber}}</p>
+  
+</section>
+
+
+
+
+<script>
+  var map = L.map('map1').setView([30, 31], 1);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+</script>
+
+{{#each trips}}
+<script>
+  L.marker([{{startingLocationLatitude}}, {{startingLocationLongitude}}]).addTo(map)
+    .bindPopup("Starting Location ");
+</script>
+{{/each}}
+
+<script src="https://cdn.jsdelivr.net/npm/gaugeJS/dist/gauge.min.js"></script>
+<script>
+  src="https://cdn.jsdelivr.net/npm/gaugeJS/dist/gauge.min.js"
+  const opts = {
+    angle: -0.21, // The span of the gauge arc
+    lineWidth: 0.15, // The line thickness
+    radiusScale: 0.78, // Relative radius
+    pointer: {
+      length: 0.42, // // Relative to gauge radius
+      strokeWidth: 0.033, // The thickness
+      color: '#000000' // Fill color
+    },
+    limitMax: false,     // If false, max value increases automatically if value > maxValue
+    limitMin: false,     // If true, the min value of the gauge will be fixed
+    colorStart: '#6F6EA0',   // Colors
+    colorStop: '#C0C0DB',    // just experiment with them
+    strokeColor: '#EEEEEE',  // to see which ones work best for you
+    generateGradient: true,
+    highDpiSupport: true,     // High resolution support
+
+  };
+  const speed = {{speedNumber}}
+  const target = document.getElementById('gauge'); // your canvas element
+  const gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+  gauge.maxValue = 360;
+  console.log(speed) // set max gauge value
+  gauge.setMinValue(10);  // Prefer setter over gauge.minValue = 0
+  gauge.animationSpeed = 45; // set animation speed (32 is default value)
+  gauge.set(speed); // set actual value
+</script>

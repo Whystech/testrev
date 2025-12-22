@@ -1,0 +1,538 @@
+{
+  "file": "./models/trips.json",
+  "trips": [
+    {
+      "startedAt": "2025-12-22 19:19:44",
+      "_id": "efaa0a2e-0f82-40c9-a638-9fac25779939",
+      "endedAt": "2025-12-22 19:19:50",
+      "telemetry": [
+        {
+          "userID": "ianuj",
+          "temp": 36.925777435302734,
+          "humidity": 21.825674057006836,
+          "ts": 1766431184,
+          "speed": "300",
+          "latitude": 44.478647,
+          "longitude": 26.1437089
+        },
+        {
+          "userID": "ianuj",
+          "temp": 36.870384216308594,
+          "humidity": 22.544696807861328,
+          "ts": 1766431186,
+          "speed": "300",
+          "latitude": 44.4786503,
+          "longitude": 26.1437037
+        },
+        {
+          "userID": "ianuj",
+          "temp": 36.94424057006836,
+          "humidity": 22.423673629760742,
+          "ts": 1766431187,
+          "speed": "300",
+          "latitude": 44.478652,
+          "longitude": 26.1437025
+        },
+        {
+          "userID": "ianuj",
+          "temp": 36.75960159301758,
+          "humidity": 22.943363189697266,
+          "ts": 1766431188,
+          "speed": "300",
+          "latitude": 44.4786549,
+          "longitude": 26.1437027
+        },
+        {
+          "userID": "ianuj",
+          "temp": 36.75960159301758,
+          "humidity": 22.943363189697266,
+          "ts": 1766431188,
+          "speed": "300",
+          "latitude": 44.4786549,
+          "longitude": 26.1437027
+        },
+        {
+          "userID": "ianuj",
+          "temp": 36.70420837402344,
+          "humidity": 22.12467384338379,
+          "ts": 1766431190,
+          "speed": "300",
+          "latitude": 44.4786575,
+          "longitude": 26.1437
+        }
+      ],
+      "status": "Ended by user"
+    },
+    {
+      "startedAt": "2025-12-22 19:22:09",
+      "_id": "ff4d5f2f-ba47-4ffa-83ea-f1bfa50f686c",
+      "endedAt": "2025-12-22 19:22:15",
+      "telemetry": [
+        {
+          "userID": "ianuj",
+          "temp": 36.962703704833984,
+          "humidity": 22.34180450439453,
+          "ts": 1766431330,
+          "speed": "300",
+          "latitude": 44.478738,
+          "longitude": 26.1437629
+        },
+        {
+          "userID": "ianuj",
+          "temp": 36.962703704833984,
+          "humidity": 22.34180450439453,
+          "ts": 1766431330,
+          "speed": "300",
+          "latitude": 44.478738,
+          "longitude": 26.1437629
+        },
+        {
+          "userID": "ianuj",
+          "temp": 36.907310485839844,
+          "humidity": 22.128232955932617,
+          "ts": 1766431332,
+          "speed": "300",
+          "latitude": 44.4787378,
+          "longitude": 26.1437615
+        },
+        {
+          "userID": "ianuj",
+          "temp": 36.907310485839844,
+          "humidity": 22.128232955932617,
+          "ts": 1766431332,
+          "speed": "300",
+          "latitude": 44.4787378,
+          "longitude": 26.1437615
+        },
+        {
+          "userID": "ianuj",
+          "temp": 37.03656005859375,
+          "humidity": 22.501983642578125,
+          "ts": 1766431334,
+          "speed": "300",
+          "latitude": 44.4787408,
+          "longitude": 26.1437512
+        }
+      ],
+      "status": "Ended by user"
+    },
+    {
+      "startedAt": "2025-12-22 19:24:02",
+      "_id": "6a10741b-9358-4194-80f1-0a4f2ce782ce",
+      "endedAt": "2025-12-22 19:24:08",
+      "telemetry": [
+        {
+          "userID": "ianuj",
+          "temp": 36.999629974365234,
+          "humidity": 21.900423049926758,
+          "ts": 1766431443,
+          "speed": "300",
+          "latitude": 44.4787381,
+          "longitude": 26.1437261
+        },
+        {
+          "userID": "ianuj",
+          "temp": 36.999629974365234,
+          "humidity": 21.900423049926758,
+          "ts": 1766431443,
+          "speed": "300",
+          "latitude": 44.4787381,
+          "longitude": 26.1437261
+        },
+        {
+          "userID": "ianuj",
+          "temp": 37.11041259765625,
+          "humidity": 22.277732849121094,
+          "ts": 1766431445,
+          "speed": "300",
+          "latitude": 44.4787392,
+          "longitude": 26.1437319
+        },
+        {
+          "userID": "ianuj",
+          "temp": 37.11041259765625,
+          "humidity": 22.277732849121094,
+          "ts": 1766431445,
+          "speed": "300",
+          "latitude": 44.4787392,
+          "longitude": 26.1437319
+        },
+        {
+          "userID": "ianuj",
+          "temp": 37.147342681884766,
+          "humidity": 22.39519691467285,
+          "ts": 1766431447,
+          "speed": "300",
+          "latitude": 44.4787386,
+          "longitude": 26.143736
+        }
+      ],
+      "status": "Ended by user"
+    },
+    {
+      "startedAt": "2025-12-22 19:26:18",
+      "_id": "d7ebda27-2972-4149-86b5-f816dfdce2f5",
+      "endedAt": "2025-12-22 19:26:27",
+      "telemetry": [
+        {
+          "userID": "ianuj",
+          "temp": 37.59047317504883,
+          "humidity": 22.726232528686523,
+          "ts": 1766431579,
+          "speed": 10,
+          "latitude": 44.4787007,
+          "longitude": 26.1436597
+        },
+        {
+          "userID": "ianuj",
+          "temp": 37.59047317504883,
+          "humidity": 22.726232528686523,
+          "ts": 1766431579,
+          "speed": 10,
+          "latitude": 44.4787007,
+          "longitude": 26.1436597
+        },
+        {
+          "userID": "ianuj",
+          "temp": 37.59047317504883,
+          "humidity": 21.473281860351562,
+          "ts": 1766431581,
+          "speed": 276,
+          "latitude": 44.4786973,
+          "longitude": 26.1436622
+        },
+        {
+          "userID": "ianuj",
+          "temp": 37.59047317504883,
+          "humidity": 21.473281860351562,
+          "ts": 1766431581,
+          "speed": 276,
+          "latitude": 44.4786973,
+          "longitude": 26.1436622
+        },
+        {
+          "userID": "ianuj",
+          "temp": 37.5720100402832,
+          "humidity": 21.943138122558594,
+          "ts": 1766431583,
+          "speed": 87,
+          "latitude": 44.4786942,
+          "longitude": 26.1436637
+        },
+        {
+          "userID": "ianuj",
+          "temp": 37.5720100402832,
+          "humidity": 21.943138122558594,
+          "ts": 1766431583,
+          "speed": 87,
+          "latitude": 44.4786942,
+          "longitude": 26.1436637
+        },
+        {
+          "userID": "ianuj",
+          "temp": 37.71971893310547,
+          "humidity": 22.334686279296875,
+          "ts": 1766431585,
+          "speed": 153,
+          "latitude": 44.4786883,
+          "longitude": 26.1436708
+        },
+        {
+          "userID": "ianuj",
+          "temp": 37.71971893310547,
+          "humidity": 22.334686279296875,
+          "ts": 1766431585,
+          "speed": 153,
+          "latitude": 44.4786883,
+          "longitude": 26.1436708
+        }
+      ],
+      "status": "Ended by user"
+    },
+    {
+      "startedAt": "2025-12-22 19:28:03",
+      "_id": "cd53182f-13db-4bc3-b5b4-cf84a4894274",
+      "endedAt": "2025-12-22 19:28:12",
+      "telemetry": [
+        {
+          "userID": "ianuj",
+          "temp": 38.36595153808594,
+          "humidity": 21.992971420288086,
+          "ts": 1766431684,
+          "speed": 290,
+          "latitude": 44.5786721,
+          "longitude": 26.1436817
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.36595153808594,
+          "humidity": 21.992971420288086,
+          "ts": 1766431684,
+          "speed": 290,
+          "latitude": 44.5786721,
+          "longitude": 26.1436817
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.42134475708008,
+          "humidity": 20.99986457824707,
+          "ts": 1766431686,
+          "speed": 134,
+          "latitude": 44.5786779,
+          "longitude": 26.1436722
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.42134475708008,
+          "humidity": 20.99986457824707,
+          "ts": 1766431686,
+          "speed": 134,
+          "latitude": 44.5786779,
+          "longitude": 26.1436722
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.32902526855469,
+          "humidity": 21.1351261138916,
+          "ts": 1766431688,
+          "speed": 185,
+          "latitude": 44.5786833,
+          "longitude": 26.143664
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.32902526855469,
+          "humidity": 21.1351261138916,
+          "ts": 1766431688,
+          "speed": 185,
+          "latitude": 44.5786833,
+          "longitude": 26.143664
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.42134475708008,
+          "humidity": 21.273948669433594,
+          "ts": 1766431690,
+          "speed": 228,
+          "latitude": 44.5786883,
+          "longitude": 26.1436579
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.42134475708008,
+          "humidity": 21.273948669433594,
+          "ts": 1766431690,
+          "speed": 228,
+          "latitude": 44.5786883,
+          "longitude": 26.1436579
+        }
+      ],
+      "status": "Ended by user"
+    },
+    {
+      "startedAt": "2025-12-22 19:30:01",
+      "_id": "aeae45cb-6a2c-4e26-8741-b647173c8c50",
+      "endedAt": "2025-12-22 19:30:16",
+      "telemetry": [
+        {
+          "userID": "ianuj",
+          "temp": 38.60598373413086,
+          "humidity": 21.50531768798828,
+          "ts": 1766431801,
+          "speed": 46,
+          "latitude": 44.578608100000004,
+          "longitude": 26.1437013
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.60598373413086,
+          "humidity": 21.50531768798828,
+          "ts": 1766431801,
+          "speed": 46,
+          "latitude": 44.578608100000004,
+          "longitude": 26.1437013
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.64291000366211,
+          "humidity": 20.522890090942383,
+          "ts": 1766431803,
+          "speed": 261,
+          "latitude": 44.578605100000004,
+          "longitude": 26.1437018
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.716766357421875,
+          "humidity": 21.14580535888672,
+          "ts": 1766431805,
+          "speed": 65,
+          "latitude": 44.578607,
+          "longitude": 26.1437017
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.716766357421875,
+          "humidity": 20.818328857421875,
+          "ts": 1766431806,
+          "speed": 202,
+          "latitude": 44.5786082,
+          "longitude": 26.1437026
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.716766357421875,
+          "humidity": 20.818328857421875,
+          "ts": 1766431806,
+          "speed": 202,
+          "latitude": 44.5786082,
+          "longitude": 26.1437026
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.77215576171875,
+          "humidity": 20.629674911499023,
+          "ts": 1766431808,
+          "speed": 288,
+          "latitude": 44.5786164,
+          "longitude": 26.1437038
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.58751678466797,
+          "humidity": 21.640579223632812,
+          "ts": 1766431809,
+          "speed": 119,
+          "latitude": 44.5786184,
+          "longitude": 26.1437055
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.58751678466797,
+          "humidity": 21.640579223632812,
+          "ts": 1766431809,
+          "speed": 119,
+          "latitude": 44.5786184,
+          "longitude": 26.1437055
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.58751678466797,
+          "humidity": 21.48040008544922,
+          "ts": 1766431811,
+          "speed": 158,
+          "latitude": 44.578624600000005,
+          "longitude": 26.1437055
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.58751678466797,
+          "humidity": 21.48040008544922,
+          "ts": 1766431811,
+          "speed": 158,
+          "latitude": 44.578624600000005,
+          "longitude": 26.1437055
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.58751678466797,
+          "humidity": 21.28818702697754,
+          "ts": 1766431813,
+          "speed": 69,
+          "latitude": 44.5786271,
+          "longitude": 26.143704
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.58751678466797,
+          "humidity": 21.28818702697754,
+          "ts": 1766431813,
+          "speed": 69,
+          "latitude": 44.5786271,
+          "longitude": 26.143704
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.624446868896484,
+          "humidity": 21.444805145263672,
+          "ts": 1766431815,
+          "speed": 130,
+          "latitude": 44.5786291,
+          "longitude": 26.143703
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.624446868896484,
+          "humidity": 21.444805145263672,
+          "ts": 1766431815,
+          "speed": 130,
+          "latitude": 44.5786291,
+          "longitude": 26.143703
+        }
+      ],
+      "status": "Ended by user"
+    },
+    {
+      "startedAt": "2025-12-22 19:31:58",
+      "_id": "968ea90a-ee9a-45ee-b66f-1fe5eceebb57",
+      "endedAt": "2025-12-22 19:32:05",
+      "telemetry": [
+        {
+          "userID": "ianuj",
+          "temp": 38.716766357421875,
+          "humidity": 21.28818702697754,
+          "ts": 1766431919,
+          "speed": 102,
+          "latitude": 44.578692000000004,
+          "longitude": 26.1436922
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.753692626953125,
+          "humidity": 21.323781967163086,
+          "ts": 1766431920,
+          "speed": 211,
+          "latitude": 44.5786967,
+          "longitude": 26.1436904
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.753692626953125,
+          "humidity": 21.323781967163086,
+          "ts": 1766431920,
+          "speed": 211,
+          "latitude": 44.5786967,
+          "longitude": 26.1436904
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.90140151977539,
+          "humidity": 21.16716194152832,
+          "ts": 1766431922,
+          "speed": 242,
+          "latitude": 44.5787028,
+          "longitude": 26.143687
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.90140151977539,
+          "humidity": 21.16716194152832,
+          "ts": 1766431922,
+          "speed": 242,
+          "latitude": 44.5787028,
+          "longitude": 26.143687
+        },
+        {
+          "userID": "ianuj",
+          "temp": 38.790618896484375,
+          "humidity": 21.131567001342773,
+          "ts": 1766431924,
+          "speed": 117,
+          "latitude": 44.578704200000004,
+          "longitude": 26.143684
+        }
+      ],
+      "status": "Ended by user"
+    }
+  ]
+}
