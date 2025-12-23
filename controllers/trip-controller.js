@@ -40,8 +40,8 @@ export const tripController = {
       telemetryPoint.formattedTemp = Number(telemetryPoint.temp.toString().substring(0, 4))
       telemetryPoint.formattedHumidity = Number(telemetryPoint.humidity.toString().substring(0, 4))
       telemetryPoint.formattedTimeStamp = dayjs.unix(telemetryPoint.ts).format('YYYY-MM-DD HH:mm:ss')
-      telemetryPoint.formattedLatitude = Number(telemetryPoint.latitude.toString().substring(0, 5))
-      telemetryPoint.formattedLongitude = Number(telemetryPoint.longitude.toString().substring(0, 5))
+      telemetryPoint.formattedLatitude = Number(telemetryPoint.latitude.toFixed(5))
+      telemetryPoint.formattedLongitude = Number(telemetryPoint.longitude.toFixed(5));
       if (telemetryPoint.speed > 120){
         telemetryPoint.comments.push("Speed Violation")
         hasComments = true;
