@@ -1,7 +1,8 @@
 
-//MQTT
 import mqtt from "mqtt";
-import EventEmitter from "events";
+import { v4 } from "uuid";
+import { EventEmitter } from 'events';
+import { WebSocketServer } from 'ws';
 
 const USER_ID = 'ianuj'
 const broker = 'ssl://8cd1987612ce4be5a8a0228b31bd0975.s1.eu.hivemq.cloud'
@@ -26,7 +27,9 @@ let telemetryInterval = null;
 let telemetry;
 export let rpiStatus;
 export let speed;
-export const statusEmit = new EventEmitter() //construct emitter
+export let rpm;
+export const statusEmit = new EventEmitter()
+const wss = new WebSocketServer({port: 8080})
 
 client.on('connect', () => {
   console.log('Connected to mqtt server')
@@ -57,11 +60,12 @@ client.on('message', (topic, message) => {
     try {
       telemetry = JSON.parse(msgStr);
       speed = telemetry.speed
+      rpm = telemetry.rpm        
     } catch (err) {
       console.error('Error parsing telemetry JSON:', err);
     }
-  }
-});
+  }}
+);
 
 client.on('error', (err) => {
   console.error('MQTT connection error:', err);
@@ -79,6 +83,7 @@ export const telemetryFuncs = {
     telemetryBuffer = [] ///clear buffer
     telemetryInterval = setInterval(() => {
       telemetryBuffer = getTelemetry();
+      telemetryBuffer._id = v4()
       telemetryRecorded.tripId = id; // associate with trip
       telemetryRecorded.push(telemetryBuffer); // put values in the trip object
       console.log("Telemetry Bffer:")
@@ -97,7 +102,6 @@ export const telemetryFuncs = {
     telemetryBuffer = [] //clear buffer
     telemetryRecorded = [] //clear any stored values
   },
-
-
-
 }
+
+

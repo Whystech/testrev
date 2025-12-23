@@ -54,11 +54,8 @@
 
 
         <div class="column has-background-grey-light">
-          <h3>Temperature</h3>
-          <p>Started at: {{trip.startedAt}} °C</p>
-          <p>Ended at Temp: {{trip.endedAt}} °C</p>
-          <p>Latest Temp: {{trip.id}} °C</p>
-          <p>Latest Weather Code: {{trip.id}}</p>
+          <h3>Violations</h3>
+          <p></p>
         </div>
 
         <div class="column has-background-dark has-text-white">
@@ -71,54 +68,45 @@
 
         <div class="column has-background-grey-light">
           <h3>Wind</h3>
-
-          <p>placholder</p>
-
-
-          <p>Latest Wind Direction: {{trip.id}}</p>
-          <p>Min Wind: {{trip.id}} km/h</p>
-          <p>Max Wind: {{trip.id}} km/h</p>
+          <p>Placeholder</p>
+          <p>Placeholder: {{trip.id}}</p>
+          <p>Placeholder: {{trip.id}} km/h</p>
+          <p>Placeholder: {{trip.id}} km/h</p>
         </div>
 
 
         <div class="column has-background-dark has-text-white">
           <h3 class="has-text-white">Pressure</h3>
-          <p>Min Pressure: {{minStationPressure}}</p>
+          <p>Placeholder</p>
           <p>Max Pressure: {{maxStationPressure}} </p>
           <p>Latest Pressure: {{latestPressure}}</p>
         </div>
 
       </div>
     </div>
-
-
-
     <div class="m-4">
-    </div>
-    {{> map}}
-  </div>
 
 </section>
 
 <script>
-  console.log(window.counter);
-  var map = L.map('map1').setView([{{startingLocationLatitude}}, {{startingLocationLongitude}}], 15);
+
+  const startMap = L.map('map1').setView([{{ startingLocationLatitude }}, {{ startingLocationLongitude }}], 15);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 20,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map);
-//add start marker
-  L.marker([{{startingLocationLatitude}}, {{startingLocationLongitude}}]).addTo(map)
+  }).addTo(startMap);
+  //add start marker
+  L.marker([{{ startingLocationLatitude }}, {{ startingLocationLongitude }}]).addTo(startMap)
     .bindPopup("Starting Location ");
 </script>
 <script>
-  console.log(window.counter);
-  var map = L.map('map2').setView([{{endingLocationLatitude}}, {{endingLocationLongitude}}], 15);
+
+  const endMap = L.map('map2').setView([{{ endingLocationLatitude }}, {{ endingLocationLongitude }}], 15);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 20,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map);
-//add end marker
-   L.marker([{{startingLocationLatitude}}, {{startingLocationLongitude}}]).addTo(map)
+  }).addTo(endMap);
+  //add end marker
+  L.marker([{{ startingLocationLatitude }}, {{ startingLocationLongitude }}]).addTo(endMap)
     .bindPopup("Ending Location ");
 </script>

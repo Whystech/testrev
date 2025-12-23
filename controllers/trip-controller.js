@@ -32,17 +32,27 @@ export const tripController = {
     const id = request.params.id;
     const trip = await tripStore.getTripById(id);
     const telemetry = trip.telemetry
+    let hasComments = false
 
     //Format received data
     telemetry.forEach(telemetryPoint => {
+      telemetryPoint.comments = []
       telemetryPoint.formattedTemp = Number(telemetryPoint.temp.toString().substring(0, 4))
       telemetryPoint.formattedHumidity = Number(telemetryPoint.humidity.toString().substring(0, 4))
       telemetryPoint.formattedTimeStamp = dayjs.unix(telemetryPoint.ts).format('YYYY-MM-DD HH:mm:ss')
+      telemetryPoint.formattedLatitude = Number(telemetryPoint.latitude.toString().substring(0, 5))
+      telemetryPoint.formattedLongitude = Number(telemetryPoint.longitude.toString().substring(0, 5))
+      if (telemetryPoint.speed > 120){
+        telemetryPoint.comments.push("Speed Violation")
+        hasComments = true;
+      }
+      if (telemetryPoint.rpm > 4000){
+        telemetryPoint.comments.push("Over Rev")
+        hasComments = true;
+      }
     });
     const startingLocationCoords = [telemetry[0].latitude, telemetry[0].longitude]
     const endingLocationCoords = [telemetry[telemetry.length - 1].latitude, telemetry[telemetry.length - 1].longitude]
-
-
     //const maxSpeed = await tripStore.getMaxParameter(id, "speed");
     //const maxRpm = await tripStore.getMinParameter(id, "rpm");
     ///TREND DATA
@@ -56,9 +66,11 @@ export const tripController = {
       startingLocationLatitude: startingLocationCoords[0],
       startingLocationLongitude: startingLocationCoords[1],
       endingLocationLatitude: endingLocationCoords[0],
-      endingLocationLongitude: endingLocationCoords[1]
+      endingLocationLongitude: endingLocationCoords[1], 
+      hasComments: hasComments
       //graph: graph,
     };
+    console.log(telemetry)
     response.render("trip-view", viewData);
   },
 
