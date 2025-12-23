@@ -1,0 +1,35 @@
+{
+  "file": "./models/trips.json",
+  "trips": [
+    {
+      "startedAt": "2025-12-23 11:38:28",
+      "_id": "66025f25-42fc-4fcf-a696-35e4c9056e48",
+      "endedAt": "2025-12-23 11:38:30",
+      "telemetry": [
+        {
+          "userID": "ianuj",
+          "temp": 34.80243682861328,
+          "humidity": 21.572948455810547,
+          "ts": 1766489909,
+          "speed": 77,
+          "latitude": 44.4786375,
+          "longitude": 26.1437215,
+          "rpm": 1536,
+          "_id": "41e0908c-f3c5-40a2-8d24-78cf8b85c0e3"
+        },
+        {
+          "userID": "ianuj",
+          "temp": 34.654727935791016,
+          "humidity": 22.046363830566406,
+          "ts": 1766489910,
+          "speed": 176,
+          "latitude": 44.4786346,
+          "longitude": 26.1437207,
+          "rpm": 1600,
+          "_id": "a495f3f1-1096-49a2-9b11-a3997108f077"
+        }
+      ],
+      "status": "Ended by user"
+    }
+  ]
+}
