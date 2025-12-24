@@ -1,0 +1,38 @@
+<div class="box" style ="overflow-x:auto;">
+  <table class="table is-fullwidth">
+    {{#if tripsPresent}}
+    <h1 class="title has-text-centered has-text-black">Trips</h1>
+    <thead>
+      <tr>
+        <th>Started At</th>
+        <th>Ended At</th>
+        <th>ID</th>
+        <th>Status</th>
+        <th></th>
+        <th></th>
+        {{! Dummy th element so the edit/delete icons get a border above them on the first row}}
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      {{#each trips}}
+      <tr>
+        <td>{{startedAt}}</td>
+        <td>{{endedAt}}</td>
+        <td>{{_id}}</td>
+        <td>{{status}}</td>
+        <td></td>
+        <td><a class="button" href="/trip/{{_id}}">Show</a></td>
+      </tr>
+      {{/each}}
+      {{else}}
+      <h1 class="title has-text-centered has-text-black">No Trips Recorded</h1>
+      {{/if}}
+      
+    </tbody>
+  </table>
+   <div class="" id="chart"></div>
+</div>
+

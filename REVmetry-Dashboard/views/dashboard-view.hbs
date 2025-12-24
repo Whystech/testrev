@@ -1,0 +1,35 @@
+{{> menu active="dashboard"}}
+<br>
+
+
+<section class="content section background-is-black">
+  {{> record-button}}
+  <div class="box" style="height: 45vh" id="map1"></div>
+  {{> list-trips}}
+  <div class="box columns is-centered">
+
+    <div class="column is-half">
+      <div style="text-align: center">
+        <p>Speed {{speedNumber}}</p>
+     
+      <canvas class="column is-full" id='gauge1'></canvas>
+       </div>
+    </div>
+
+    <div class="column is-half">
+      <div style="text-align: center">
+        <p>RPM {{rpmNumber}}</p>
+      
+      <canvas class="column is-full" id='gauge2'></canvas>
+      </div>
+    </div>
+  </div>
+
+</section>
+{{> gauges-map-scripts}}
+
+<script>
+  const ws = new WebSocket("ws://localhost:8080");
+  ws.addEventListener("open", () => {
+  console.log("Connected with mqttWSside")});
+</script>
