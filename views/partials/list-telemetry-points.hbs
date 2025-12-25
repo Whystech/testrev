@@ -27,12 +27,16 @@
         <td> {{formattedLatitude}}</td>
         <td> {{formattedLongitude}}</td>
         <td> {{comments}} </td>
-        <td><button class="button" onClick="setMarker({{latitude}}, {{longitude}}, '{{_id}}')">Show on Map</button></a></td>
+        {{#if invalidCoords}}
+         <td><a><button class="button" disabled>Invalid Coords</button></a></td>
+         {{else}}
+         <td><a><button class="button" onClick="setMarker({{latitude}}, {{longitude}}, '{{_id}}')">Show on Map</button></a></td>
+        {{/if}}
+       
       </tr>
       {{/each}}
     </tbody>
   </table>
-
 </div>
 <div class="box" id="map5" style="height:45vh"></div>
 

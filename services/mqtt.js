@@ -3,6 +3,7 @@ import mqtt from "mqtt";
 import { v4 } from "uuid";
 import { EventEmitter } from 'events';
 import { WebSocketServer } from 'ws';
+import WebSocket from 'ws';
 
 
 const USER_ID = 'ianuj'
@@ -11,7 +12,7 @@ const options = {
   username: "ianuj",
   password: "HDIPiot2026@",
   protocolVersion: 5,
-  clientId: `${USER_ID}-node`,
+  clientId: v4(), //remember to keep this client node2 so the one deployed on Render is not the same (if running local and Render deployment at the same time)
   port: 8883
 }
 const client = mqtt.connect(broker, options)
@@ -30,8 +31,9 @@ export let rpiStatus;
 export let speed;
 export let rpm;
 export const statusEmit = new EventEmitter()
-const wss = new WebSocketServer({ port: 8080 })
 
+///WSS
+const wserver = new WebSocketServer({ port: 8080 })
 
 //MQTT
 client.on('connect', () => {
@@ -51,10 +53,9 @@ client.on('disconnect', () => {
 client.on('message', (topic, message) => {
   const msgStr = message.toString();
   if (topic === STATUS_TOPIC) {
-    //Status messages as plain string
+    //Status messages as string
     rpiStatus = msgStr;
     console.log(`Pi status: ${rpiStatus}`);
-
     if (rpiStatus == "offline") {
       statusEmit.emit("offlineStatus", rpiStatus)
     }
@@ -64,6 +65,15 @@ client.on('message', (topic, message) => {
       telemetry = JSON.parse(msgStr);
       speed = telemetry.speed
       rpm = telemetry.rpm
+      wserver.clients.forEach(client => {
+    if (client.readyState === 1) { // 1 = OPEN
+      let data = JSON.stringify({"speed":speed, "rpm": rpm})
+      client.send(data)
+    }
+      });
+
+
+
     } catch (err) {
       console.error('Error parsing telemetry JSON:', err);
     }
@@ -89,13 +99,13 @@ export const telemetryFuncs = {
         return; // telemetry might be 0 if it's a fresh start
       telemetryBuffer = getTelemetry()
       telemetryBuffer._id = v4();
-      // optional: skip duplicates
+      // duplicates problem, not sure why it happens
       const last = telemetryRecorded[telemetryRecorded.length - 1];
       if (!last || JSON.stringify(last) !== JSON.stringify(telemetryBuffer)) {
         telemetryRecorded.push(telemetryBuffer);
       }
       console.log("Telemetry Buffer:", telemetryBuffer);
-    }, 1000);
+    }, 300);
 
   },
 

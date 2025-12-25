@@ -32,24 +32,37 @@ export const tripController = {
     const id = request.params.id;
     const trip = await tripStore.getTripById(id);
     const telemetry = trip.telemetry
-    let hasComments = false
+    let speedViolationCounter = 0
+    let rpmViolationCounter = 0
+    let hasComments = false;
 
     //Format received data
     telemetry.forEach(telemetryPoint => {
+      telemetryPoint.invalidCoords = false;
+      
+      telemetry.rpmViolationCounter = 0
       telemetryPoint.comments = []
-      telemetryPoint.formattedTemp = Number(telemetryPoint.temp.toString().substring(0, 4))
+      telemetryPoint.formattedTemp = Number(telemetryPoint.temp.toString().substring(0, 4)) //strings since there is nothing else to be done with this info
       telemetryPoint.formattedHumidity = Number(telemetryPoint.humidity.toString().substring(0, 4))
       telemetryPoint.formattedTimeStamp = dayjs.unix(telemetryPoint.ts).format('YYYY-MM-DD HH:mm:ss')
-      telemetryPoint.formattedLatitude = Number(telemetryPoint.latitude.toFixed(5))
-      telemetryPoint.formattedLongitude = Number(telemetryPoint.longitude.toFixed(5));
-      if (telemetryPoint.speed > 120){
+      telemetryPoint.formattedLatitude = Number(Number(telemetryPoint.latitude).toFixed(5))
+      telemetryPoint.formattedLatitude = Number(Number(telemetryPoint.latitude).toFixed(5))
+      if (telemetryPoint.speed > 120) {
         telemetryPoint.comments.push("Speed Violation")
+        telemetry.speedViolation = true;
+        speedViolationCounter += 1
         hasComments = true;
       }
-      if (telemetryPoint.rpm > 4000){
+      if (telemetryPoint.rpm > 4000) {
         telemetryPoint.comments.push("Over Rev")
+        telemetry.rpmViolation = true;
+        rpmViolationCounter += 1
         hasComments = true;
       }
+      if (telemetryPoint.formattedLatitude === 0 || telemetryPoint.formattedLatitude === 0)
+        telemetryPoint.invalidCoords = true;
+           
+
     });
     const startingLocationCoords = [telemetry[0].latitude, telemetry[0].longitude]
     const endingLocationCoords = [telemetry[telemetry.length - 1].latitude, telemetry[telemetry.length - 1].longitude]
@@ -66,7 +79,9 @@ export const tripController = {
       startingLocationLatitude: startingLocationCoords[0],
       startingLocationLongitude: startingLocationCoords[1],
       endingLocationLatitude: endingLocationCoords[0],
-      endingLocationLongitude: endingLocationCoords[1], 
+      endingLocationLongitude: endingLocationCoords[1],
+      speedViolationCounter: speedViolationCounter,
+      rpmViolationCounter: rpmViolationCounter,
       hasComments: hasComments
       //graph: graph,
     };

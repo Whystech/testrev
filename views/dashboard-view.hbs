@@ -10,26 +10,121 @@
 
     <div class="column is-half">
       <div style="text-align: center">
-        <p>Speed {{speedNumber}}</p>
-     
-      <canvas class="column is-full" id='gauge1'></canvas>
-       </div>
+        <p id="actualSpeed">0</p>
+        <canvas class="column is-full" id='gauge1'></canvas>
+      </div>
     </div>
 
     <div class="column is-half">
       <div style="text-align: center">
-        <p>RPM {{rpmNumber}}</p>
-      
-      <canvas class="column is-full" id='gauge2'></canvas>
+        <p id="actualRpm">0</p>
+        <canvas class="column is-full" id='gauge2'></canvas>
       </div>
     </div>
   </div>
 
 </section>
-{{> gauges-map-scripts}}
-
 <script>
-  const ws = new WebSocket("ws://localhost:8080");
+  var map = L.map('map1').setView([45, 20], 5);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+</script>
+
+{{#each trips}}
+<script>
+  L.marker([{{ startingLocationLatitude }}, {{ startingLocationLongitude }}]).addTo(map)
+    .bindPopup('{{_id}}');
+</script>
+{{/each}}
+
+<script src="https://cdn.jsdelivr.net/npm/gaugeJS/dist/gauge.min.js"></script>
+<script> src = "/scripts/speedGauge.js"</script>
+<script>
+
+  src = "https://cdn.jsdelivr.net/npm/gaugeJS/dist/gauge.min.js"
+
+  let speedFromMqtt
+  let rpmFromMqtt
+
+
+  const opts1 = {
+    angle: -0.21, // The span of the gauge arc
+    lineWidth: 0.15, // The line thickness
+    radiusScale: 0.78, // Relative radius
+    pointer: {
+      length: 0.42, // // Relative to gauge radius
+      strokeWidth: 0.033, // The thickness
+      color: '#000000' // Fill color
+    },
+    limitMax: false,     // If false, max value increases automatically if value > maxValue
+    limitMin: false,     // If true, the min value of the gauge will be fixed
+    colorStart: '#6F6EA0',   // Colors
+    colorStop: '#C0C0DB',    // just experiment with them
+    strokeColor: '#EEEEEE',  // to see which ones work best for you
+    generateGradient: true,
+    highDpiSupport: true,     // High resolution support
+
+  };
+  let speed = speedFromMqtt || 0
+  let target1 = document.getElementById('gauge1'); // your canvas element
+  const gauge1 = new Gauge(target1).setOptions(opts1); // create sexy gauge!
+  gauge1.maxValue = 360;
+  gauge1.setMinValue(10);  // Prefer setter over gauge.minValue = 0
+  gauge1.animationSpeed = 45; // set animation speed (32 is default value)
+  gauge1.set(speed); // set actual value
+
+  src = "https://cdn.jsdelivr.net/npm/gaugeJS/dist/gauge.min.js"
+  const opts2 = {
+    angle: -0.21, // The span of the gauge arc
+    lineWidth: 0.15, // The line thickness
+    radiusScale: 0.78, // Relative radius
+    pointer: {
+      length: 0.42, // // Relative to gauge radius
+      strokeWidth: 0.033, // The thickness
+      color: '#000000' // Fill color
+    },
+    limitMax: false,     // If false, max value increases automatically if value > maxValue
+    limitMin: false,     // If true, the min value of the gauge will be fixed
+    colorStart: '#6F6EA0',   // Colors
+    colorStop: '#C0C0DB',    // just experiment with them
+    strokeColor: '#EEEEEE',  // to see which ones work best for you
+    generateGradient: true,
+    highDpiSupport: true,     // High resolution support
+
+  };
+  let rpm = rpmFromMqtt || 0
+  let target2 = document.getElementById('gauge2'); // your canvas element
+  const gauge2 = new Gauge(target2).setOptions(opts2); // create sexy gauge!
+  gauge2.maxValue = 5000;
+  gauge2.setMinValue(10);  // Prefer setter over gauge.minValue = 0
+  gauge2.animationSpeed = 45; // set animation speed (32 is default value)
+  ; // set actual value
+ 
+
+  const ws = new WebSocket("ws://localhost:8080"); // match the server port
+
   ws.addEventListener("open", () => {
-  console.log("Connected with mqttWSside")});
+    console.log("Connected with mqttWSside");
+  });
+
+  ws.addEventListener("message", event => {
+    console.log("Message from server:", event.data);
+    console.log(JSON.parse(event.data))
+    speedFromMqtt = JSON.parse(event.data).speed
+    console.log(speedFromMqtt)
+    rpmFromMqtt = JSON.parse(event.data).rpm
+   
+  });
+
+  ws.addEventListener("error", err => {
+    console.error("WebSocket error:", err);})
+
+    setInterval(function () {
+      document.getElementById("actualSpeed").innerHTML = speedFromMqtt
+      document.getElementById("actualRpm").innerHTML = rpmFromMqtt
+      gauge2.set(rpmFromMqtt)
+      gauge1.set(speedFromMqtt)
+}, 1000);
 </script>

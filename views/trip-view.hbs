@@ -55,7 +55,17 @@
 
         <div class="column has-background-grey-light">
           <h3>Violations</h3>
-          <p></p>
+          {{#if hasComments}}
+          {{#if telemetry.speedViolation}}
+            <p>Speed Violations ({{speedViolationCounter}})</p>
+          {{/if}}
+          {{#if telemetry.rpmViolation}}
+            <p>Rpm Violations</p>
+          {{/if}}
+          {{else}}
+          <p>No violations</p>
+          {{/if}}
+          
         </div>
 
         <div class="column has-background-dark has-text-white">
