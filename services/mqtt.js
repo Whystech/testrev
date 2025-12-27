@@ -35,9 +35,8 @@ export let longitude;
 export const statusEmit = new EventEmitter()
 
 ///WSS
-const PORT = Number(process.env.PORT)+1
- || 8080; //for RENDER deployment
-console.log(process.env.PORT)
+const PORT = Number(process.env.PORT)+1 || 8080; //for RENDER deployment I need a valid port, since the env.PORT is the one for the node server, I find the next one for the WSS
+console.log(PORT)
 const wss = new WebSocketServer({ port: PORT });
 wss.on('error', (err) => {
   console.error('WebSocket server error:', err);
