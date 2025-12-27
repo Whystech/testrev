@@ -135,6 +135,9 @@
 
 
 let wsUrl;
+
+const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'; //render is https, local is http
+
 if (window.location.hostname === 'rpi'){ //for testing on local network since the hostname of the pi is rpi
    wsUrl = 'ws://rpi:8080';
 }
@@ -143,7 +146,7 @@ else if(window.location.hostname === 'localhost') {
   wsUrl = 'ws://localhost:8080';
 } else {
   // RENDER
-  wsUrl = `ws://${window.location.host}`;
+  wsUrl = `${protocol}//${window.location.host}`;
 }
   const ws = new WebSocket(wsUrl); // match the server port
 
