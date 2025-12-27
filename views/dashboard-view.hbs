@@ -80,9 +80,11 @@
   let rpmFromMqtt
   let latFromMqtt
   let lonFromMqtt
+  let speed = speedFromMqtt || 0
+  let rpm = rpmFromMqtt || 0
 
   const opts1 = {
-    angle: -0.21, // The span of the gauge arc
+    angle: -0.11, // The span of the gauge arc
     lineWidth: 0.15, // The line thickness
     radiusScale: 0.78, // Relative radius
     pointer: {
@@ -93,14 +95,12 @@
     limitMax: false,     // If false, max value increases automatically if value > maxValue
     limitMin: false,     // If true, the min value of the gauge will be fixed
     colorStart: '#6F6EA0',   // Colors
-    colorStop: '#C0C0DB',    // just experiment with them
+    colorStop: '#6F6EA0',    // just experiment with them
     strokeColor: '#EEEEEE',  // to see which ones work best for you
-    generateGradient: true,
-    highDpiSupport: true,     // High resolution support
-
+    generateGradient: false,
+    highDpiSupport: false,     // High resolution support
   };
-  let speed = speedFromMqtt || 0
-  let rpm = rpmFromMqtt || 0
+  
   let target1 = document.getElementById('gauge1'); // your canvas element
   const gauge1 = new Gauge(target1).setOptions(opts1); // create sexy gauge!
   gauge1.maxValue = 360;
@@ -108,9 +108,8 @@
   gauge1.animationSpeed = 45; // set animation speed (32 is default value)
   gauge1.set(speed); // set actual value
 
-  src = "https://cdn.jsdelivr.net/npm/gaugeJS/dist/gauge.min.js"
   const opts2 = {
-    angle: -0.21, // The span of the gauge arc
+    angle: -0.10, // The span of the gauge arc
     lineWidth: 0.15, // The line thickness
     radiusScale: 0.78, // Relative radius
     pointer: {
@@ -120,11 +119,11 @@
     },
     limitMax: false,     // If false, max value increases automatically if value > maxValue
     limitMin: false,     // If true, the min value of the gauge will be fixed
-    colorStart: '#6F6EA0',   // Colors
-    colorStop: '#C0C0DB',    // just experiment with them
+    colorStart: '#930808',   // Colors
+    colorStop: '#930808',    // just experiment with them
     strokeColor: '#EEEEEE',  // to see which ones work best for you
-    generateGradient: true,
-    highDpiSupport: true,     // High resolution support
+    generateGradient: false,
+    highDpiSupport: false,     // High resolution support
 
   };
   let target2 = document.getElementById('gauge2'); // your canvas element
@@ -135,7 +134,18 @@
   ; // set actual value
 
 
-  const ws = new WebSocket("ws://localhost:8080"); // match the server port
+let wsUrl;
+if (window.location.hostname === 'rpi'){ //for testing on local network since the hostname of the pi is rpi
+   wsUrl = 'ws://rpi:8080';
+}
+else if(window.location.hostname === 'localhost') {
+  // Local
+  wsUrl = 'ws://localhost:8080';
+} else {
+  // RENDER
+  wsUrl = `ws://${window.location.host}`;
+}
+  const ws = new WebSocket(wsUrl); // match the server port
 
   ws.addEventListener("open", () => {
     console.log("Connected with mqttWSside");
@@ -164,6 +174,7 @@
     document.getElementById("actualRpm").innerHTML = rpmFromMqtt
     gauge2.set(rpmFromMqtt)
     gauge1.set(speedFromMqtt)
+    console.log(window.location.host)
   
     currentlocationmap.setView([latFromMqtt, lonFromMqtt], 17)
     if (!marker) {
@@ -171,7 +182,7 @@
     } else {
       marker.setLatLng([latFromMqtt, lonFromMqtt]); //built-in leaflet function
     }
-  }, 1500);
+  }, 800);
 
 
 </script>

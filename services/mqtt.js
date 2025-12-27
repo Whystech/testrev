@@ -35,8 +35,10 @@ export let longitude;
 export const statusEmit = new EventEmitter()
 
 ///WSS
-const wserver = new WebSocketServer({ port: 8080 })
-wserver.on('error', (err) => {
+const PORT = process.env.PORT || 8080; //for RENDER deployment
+console.log(process.env.PORT)
+const wss = new WebSocketServer({ port: PORT });
+wss.on('error', (err) => {
   console.error('WebSocket server error:', err);
 });
 
@@ -73,7 +75,7 @@ client.on('message', (topic, message) => {
       latitude = telemetry.latitude
       longitude = telemetry.longitude
       //send webscocket packet when telemetry is received
-      wserver.clients.forEach(client => {
+      wss.clients.forEach(client => {
         if (client.readyState === 1) {
           let data = JSON.stringify({ "speed": speed, "rpm": rpm, "longitude":longitude, "latitude":latitude })
           client.send(data)
