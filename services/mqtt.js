@@ -3,7 +3,7 @@ import mqtt from "mqtt";
 import { v4 } from "uuid";
 import { EventEmitter } from 'events';
 import { WebSocketServer } from 'ws';
-import WebSocket from 'ws';
+
 
 
 const USER_ID = 'ianuj'
@@ -12,7 +12,7 @@ const options = {
   username: "ianuj",
   password: "HDIPiot2026@",
   protocolVersion: 5,
-  clientId: v4(), //remember to keep this client node2 so the one deployed on Render is not the same (if running local and Render deployment at the same time)
+  clientId: v4(), //remember to keep this client differt so the one deployed on Render is not the same (if running local and Render deployment at the same time)
   port: 8883
 }
 const client = mqtt.connect(broker, options)
@@ -30,10 +30,15 @@ let telemetry;
 export let rpiStatus;
 export let speed;
 export let rpm;
+export let latitude;
+export let longitude;
 export const statusEmit = new EventEmitter()
 
 ///WSS
 const wserver = new WebSocketServer({ port: 8080 })
+wserver.on('error', (err) => {
+  console.error('WebSocket server error:', err);
+});
 
 //MQTT
 client.on('connect', () => {
@@ -65,14 +70,15 @@ client.on('message', (topic, message) => {
       telemetry = JSON.parse(msgStr);
       speed = telemetry.speed
       rpm = telemetry.rpm
+      latitude = telemetry.latitude
+      longitude = telemetry.longitude
+      //send webscocket packet when telemetry is received
       wserver.clients.forEach(client => {
-    if (client.readyState === 1) { // 1 = OPEN
-      let data = JSON.stringify({"speed":speed, "rpm": rpm})
-      client.send(data)
-    }
+        if (client.readyState === 1) {
+          let data = JSON.stringify({ "speed": speed, "rpm": rpm, "longitude":longitude, "latitude":latitude })
+          client.send(data)
+        }
       });
-
-
 
     } catch (err) {
       console.error('Error parsing telemetry JSON:', err);
@@ -85,7 +91,7 @@ client.on('error', (err) => {
   console.error('MQTT connection error:', err);
 });
 
-//get stream
+//function to use the data in controller
 function getTelemetry() {
   return telemetry
 }
@@ -96,14 +102,13 @@ export const telemetryFuncs = {
     let telemetryBuffer;
     telemetryInterval = setInterval(() => {
       if (!telemetry)
-        return; // telemetry might be 0 if it's a fresh start
+        return; // telemetry might be 0 if it's a fresh start, I do not know if the bug is from the gpsd porgram in the Pi or something else
       telemetryBuffer = getTelemetry()
-      telemetryBuffer._id = v4();
-      // duplicates problem, not sure why it happens
+      telemetryBuffer._id = v4();// id for each telemetry data to debug duplicates 
       const last = telemetryRecorded[telemetryRecorded.length - 1];
       if (!last || JSON.stringify(last) !== JSON.stringify(telemetryBuffer)) {
         telemetryRecorded.push(telemetryBuffer);
-      }
+      }// throw away identical telemetry inserts
       console.log("Telemetry Buffer:", telemetryBuffer);
     }, 300);
 
@@ -113,7 +118,7 @@ export const telemetryFuncs = {
     return telemetryRecorded
   },
 
-  stopRecording(id) {
+  stopRecording() {
     clearInterval(telemetryInterval);
     telemetryInterval = null;
     telemetryRecorded = [] //clear any stored values

@@ -3,33 +3,65 @@
 
 
 <section class="content section background-is-black">
-  {{> record-button}}
-  <div class="box" style="height: 45vh" id="map1"></div>
-  {{> list-trips}}
   <div class="box columns is-centered">
 
+
     <div class="column is-half">
+
       <div style="text-align: center">
-        <p id="actualSpeed">0</p>
+        <h2>Speed</h2>
+        <h3 id="actualSpeed">0</h3>
         <canvas class="column is-full" id='gauge1'></canvas>
       </div>
     </div>
 
     <div class="column is-half">
       <div style="text-align: center">
-        <p id="actualRpm">0</p>
+        <h2>RPM</h2>
+        <h3 id="actualRpm">0</h3>
         <canvas class="column is-full" id='gauge2'></canvas>
       </div>
     </div>
   </div>
 
+  <div class="box">
+    <h1>
+      Current Location
+    </h1>
+    <div class="" style="height: 45vh" id="currentlocationmap">
+    </div>
+  </div>
+
+  <div class="box">
+    <h1>
+      Trips starting locations
+    </h1>
+    <div class="" style="height: 45vh" id="map1">
+    </div>
+  </div>
+  {{> list-trips}}
+  <div class="box">
+    {{> record-button}}
+  </div>
+
+
 </section>
 <script>
-  var map = L.map('map1').setView([45, 20], 5);
+  ///TRIPS LOCATION MAPS
+  const map = L.map('map1').setView([50, 10], 5);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(map);
+</script>
+
+<script>
+  ///CURRENT LOCATION MAP
+  const currentlocationmap = L.map('currentlocationmap').setView([45, 20], 5);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(currentlocationmap);
 </script>
 
 {{#each trips}}
@@ -41,13 +73,13 @@
 
 <script src="https://cdn.jsdelivr.net/npm/gaugeJS/dist/gauge.min.js"></script>
 <script> src = "/scripts/speedGauge.js"</script>
-<script>
 
-  src = "https://cdn.jsdelivr.net/npm/gaugeJS/dist/gauge.min.js"
-
+<script type ="module">
+  ///GAUGES SCRIPT + LIVE ASSIGNMENT OF DATA
   let speedFromMqtt
   let rpmFromMqtt
-
+  let latFromMqtt
+  let lonFromMqtt
 
   const opts1 = {
     angle: -0.21, // The span of the gauge arc
@@ -68,6 +100,7 @@
 
   };
   let speed = speedFromMqtt || 0
+  let rpm = rpmFromMqtt || 0
   let target1 = document.getElementById('gauge1'); // your canvas element
   const gauge1 = new Gauge(target1).setOptions(opts1); // create sexy gauge!
   gauge1.maxValue = 360;
@@ -94,14 +127,13 @@
     highDpiSupport: true,     // High resolution support
 
   };
-  let rpm = rpmFromMqtt || 0
   let target2 = document.getElementById('gauge2'); // your canvas element
-  const gauge2 = new Gauge(target2).setOptions(opts2); // create sexy gauge!
+  const gauge2 = new Gauge(target2).setOptions(opts2);
   gauge2.maxValue = 5000;
   gauge2.setMinValue(10);  // Prefer setter over gauge.minValue = 0
   gauge2.animationSpeed = 45; // set animation speed (32 is default value)
   ; // set actual value
- 
+
 
   const ws = new WebSocket("ws://localhost:8080"); // match the server port
 
@@ -113,18 +145,33 @@
     console.log("Message from server:", event.data);
     console.log(JSON.parse(event.data))
     speedFromMqtt = JSON.parse(event.data).speed
-    console.log(speedFromMqtt)
     rpmFromMqtt = JSON.parse(event.data).rpm
-   
+    latFromMqtt = JSON.parse(event.data).latitude
+    lonFromMqtt = JSON.parse(event.data).longitude
+
   });
 
   ws.addEventListener("error", err => {
-    console.error("WebSocket error:", err);})
+    console.error("WebSocket error:", err);
+  })
+  let marker = null;
+  setInterval(function () {
+    rpmFromMqtt ??= 0 //avoid undefined text
+    speedFromMqtt ??= 0
+    latFromMqtt ??= 0
+    lonFromMqtt ??= 0
+    document.getElementById("actualSpeed").innerHTML = speedFromMqtt
+    document.getElementById("actualRpm").innerHTML = rpmFromMqtt
+    gauge2.set(rpmFromMqtt)
+    gauge1.set(speedFromMqtt)
+  
+    currentlocationmap.setView([latFromMqtt, lonFromMqtt], 17)
+    if (!marker) {
+      marker = L.marker([latFromMqtt, lonFromMqtt]).addTo(currentlocationmap);
+    } else {
+      marker.setLatLng([latFromMqtt, lonFromMqtt]); //built-in leaflet function
+    }
+  }, 1500);
 
-    setInterval(function () {
-      document.getElementById("actualSpeed").innerHTML = speedFromMqtt
-      document.getElementById("actualRpm").innerHTML = rpmFromMqtt
-      gauge2.set(rpmFromMqtt)
-      gauge1.set(speedFromMqtt)
-}, 1000);
+
 </script>

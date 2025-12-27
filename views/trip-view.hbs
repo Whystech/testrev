@@ -49,7 +49,7 @@
     </div>
   </section>
   <div class="box p-1">
-    <div class="box  has-background-grey">
+    <div class="box  has-background-grey m-4">
       <div class="columns is-multiline has-text-black">
 
 
@@ -57,15 +57,15 @@
           <h3>Violations</h3>
           {{#if hasComments}}
           {{#if telemetry.speedViolation}}
-            <p>Speed Violations ({{speedViolationCounter}})</p>
+          <p>Speed Violations ({{speedViolationCounter}})</p>
           {{/if}}
           {{#if telemetry.rpmViolation}}
-            <p>Rpm Violations</p>
+          <p>Rpm Violations ({{rpmViolationCounter}})</p>
           {{/if}}
           {{else}}
           <p>No violations</p>
           {{/if}}
-          
+
         </div>
 
         <div class="column has-background-dark has-text-white">
@@ -77,11 +77,9 @@
         </div>
 
         <div class="column has-background-grey-light">
-          <h3>Wind</h3>
-          <p>Placeholder</p>
-          <p>Placeholder: {{trip.id}}</p>
-          <p>Placeholder: {{trip.id}} km/h</p>
-          <p>Placeholder: {{trip.id}} km/h</p>
+          <h3>Max Values</h3>
+          <p>Speed: {{maxSpeed}} km/h</p>
+          <p>Rpm: {{maxRpm}}</p>
         </div>
 
 
@@ -91,15 +89,19 @@
           <p>Max Pressure: {{maxStationPressure}} </p>
           <p>Latest Pressure: {{latestPressure}}</p>
         </div>
-
       </div>
     </div>
-    <div class="m-4">
 
+    <div class="m-4" id="chartRpm"></div>
+
+    <div class="m-4" id="chartSpeed">
+    </div>
+
+  </div>
 </section>
 
 <script>
-
+  //MAP START POSITION
   const startMap = L.map('map1').setView([{{ startingLocationLatitude }}, {{ startingLocationLongitude }}], 15);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 20,
@@ -107,16 +109,87 @@
   }).addTo(startMap);
   //add start marker
   L.marker([{{ startingLocationLatitude }}, {{ startingLocationLongitude }}]).addTo(startMap)
-    .bindPopup("Starting Location ");
+    .bindPopup("Start Location");
 </script>
-<script>
 
+<script>
+  //MAP END POSITION
   const endMap = L.map('map2').setView([{{ endingLocationLatitude }}, {{ endingLocationLongitude }}], 15);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 20,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(endMap);
   //add end marker
-  L.marker([{{ startingLocationLatitude }}, {{ startingLocationLongitude }}]).addTo(endMap)
-    .bindPopup("Ending Location ");
+  L.marker([{{ endingLocationLatitude }}, {{ endingLocationLongitude }}]).addTo(endMap)
+    .bindPopup("End Location");
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js">
+</script>
+<script>
+  //RPM CHART
+  console.log([{{{ graph.trendTstamps }}}])
+  data = {
+
+    labels: [{{{ graph.trendTstamps }}}],
+  datasets: [
+    {
+      name: "Rpm", type: "line",
+      values: [{{ graph.trendRpm }}]
+        }],
+  yMarkers: [{ label: "High Rev", value: 4000 }],
+    yRegions: [{ label: "", start: 0, end: 4000 }]
+}
+
+  new frappe.Chart("#chartRpm", {
+    data: data,
+    type: 'line',
+    height: 180,
+    colors: ['red', 'blue'],
+    isNavigable: true,
+    lineOptions: {
+      regionFill: 1,
+      dotSize: 0.1
+    },
+    title: "RPM",
+    axisOptions: {
+      xIsSeries: true // show fewer timestamps
+    }
+  });
+</script>
+
+<script>
+  //SPEED CHART
+  console.log([{{{ graph.trendTstamps }}}])
+  data = {
+
+    labels: [{{{ graph.trendTstamps }}}],
+  datasets: [
+    {
+      name: "Speed", type: "line",
+      values: [{{ graph.trendSpeed }}]
+        }],
+  yMarkers: [{ label: "Speed Limit", value: 120 }],
+    yRegions: [{ label: "", start: 0, end: 120 }]
+}
+
+  new frappe.Chart("#chartSpeed", {
+    data: data,
+    type: 'line',
+    height: 180,
+    colors: ['blue'],
+    isNavigable: true,
+    lineOptions: {
+      regionFill: 1,
+      dotSize: 0.1
+    },
+    title: "Speed",
+    axisOptions: {
+      xIsSeries: true // show fewer timestamps
+    }
+
+
+
+  });
 </script>

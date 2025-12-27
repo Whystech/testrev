@@ -43,8 +43,7 @@
 
 
 <script>
-  // Initialize the map
-
+  // TELEMETRY POINT MAP
   const pointMap = L.map('map5').setView([{{ startingLocationLatitude }}, {{ startingLocationLongitude }}], 15);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 20,
@@ -57,15 +56,12 @@
   function setMarker(lat, lon, id) {
     lat = Number(lat);
     lon = Number(lon);
-  console.log("Marker coords:", lat, lon, id);
-
+    console.log("Marker coords:", lat, lon, id);
     if (!marker) {
       marker = L.marker([lat, lon]).addTo(pointMap);
     } else {
-      marker.setLatLng([lat, lon]);
+      marker.setLatLng([lat, lon]); //built-in leaflet function
     }
-
-    marker.bindPopup(id).openPopup();
-    pointMap.setView([lat, lon], 15);
+    pointMap.setView([lat, lon], 17);
   }
 </script>

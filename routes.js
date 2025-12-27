@@ -14,8 +14,8 @@ router.get("/trip/:id", tripController.index);
 
 //Trip routes
 
-router.get("/trip/deletetrip/:id", tripController.deleteTrip);
-router.post("/trip/:id/updatetrip", tripController.editTripName);
+router.get("/trip/delete/:id", tripController.deleteTrip);
+
 
 
 

@@ -25,8 +25,8 @@ statusEmit.on("offlineStatus", async (newStatus) => {
 });
 
 
-export let recordStatus = false //for disabling record button, exported to Dashboard Controller
-let newTrip; //initialize trip
+export let recordStatus = false //for disabling record button, exported to Dashboard Controller - biggest downside of this code, as with this variable set here is basically impossible to have multiple users recording trips at the ame time
+let newTrip; //initialize trip -
 export const tripController = {
   async index(request, response) {
     const id = request.params.id;
@@ -36,17 +36,39 @@ export const tripController = {
     let rpmViolationCounter = 0
     let hasComments = false;
 
+    let speedValuesForAverage =[]
+    let speedAverage;
+    let maxSpeed;
+    let rpmValuesForAverage = []
+    let rpmAverage;
+    let maxRpm;
+    
+
     //Format received data
     telemetry.forEach(telemetryPoint => {
       telemetryPoint.invalidCoords = false;
-      
-      telemetry.rpmViolationCounter = 0
       telemetryPoint.comments = []
       telemetryPoint.formattedTemp = Number(telemetryPoint.temp.toString().substring(0, 4)) //strings since there is nothing else to be done with this info
       telemetryPoint.formattedHumidity = Number(telemetryPoint.humidity.toString().substring(0, 4))
       telemetryPoint.formattedTimeStamp = dayjs.unix(telemetryPoint.ts).format('YYYY-MM-DD HH:mm:ss')
-      telemetryPoint.formattedLatitude = Number(Number(telemetryPoint.latitude).toFixed(5))
-      telemetryPoint.formattedLatitude = Number(Number(telemetryPoint.latitude).toFixed(5))
+      telemetryPoint.latitude ??= 0; // null or undefined to avoid bugs (telemetry could come incomplete, especially on coordinates and rpm, speed)
+      telemetryPoint.longitude ??= 0;
+      telemetryPoint.speed ??= 0
+      telemetryPoint.rpm ??= 0
+      telemetryPoint.formattedLatitude = Number(Number(telemetryPoint.latitude).toFixed(5))//toFixed returns a string
+      telemetryPoint.formattedLongitude = Number(Number(telemetryPoint.longitude).toFixed(5))
+      
+      //get meaningful speed and rpm's (less than 5 is most likely stationary, less than 1000 rpm's is most likely idle)
+      if (telemetryPoint.speed > 5){
+        speedValuesForAverage.push(telemetryPoint.speed)
+        maxSpeed = Math.max(...speedValuesForAverage) // also get max speed recorded
+        }
+
+      if (telemetryPoint.rpm > 1000){
+        rpmValuesForAverage.push(telemetryPoint.rpm)
+         maxRpm = Math.max(...rpmValuesForAverage) // also get max rpm recorded
+      }
+
       if (telemetryPoint.speed > 120) {
         telemetryPoint.comments.push("Speed Violation")
         telemetry.speedViolation = true;
@@ -60,18 +82,29 @@ export const tripController = {
         hasComments = true;
       }
       if (telemetryPoint.formattedLatitude === 0 || telemetryPoint.formattedLatitude === 0)
-        telemetryPoint.invalidCoords = true;
-           
-
+        telemetryPoint.invalidCoords = true;      
     });
+    //end of formatting data
+
     const startingLocationCoords = [telemetry[0].latitude, telemetry[0].longitude]
     const endingLocationCoords = [telemetry[telemetry.length - 1].latitude, telemetry[telemetry.length - 1].longitude]
+
+    ////CODE FOR GRAPH - NOT IMPLEMENTED 
     //const maxSpeed = await tripStore.getMaxParameter(id, "speed");
     //const maxRpm = await tripStore.getMinParameter(id, "rpm");
     ///TREND DATA
-    let graph = {};
-    //graph.trendTemps = [];
-    //graph.trendDates = [];
+      let graph = {};
+      graph.trendSpeed = [];
+      graph.trendRpm = [];
+      graph.trendTstamps = [];
+      telemetry.forEach(telemetryPoint => {
+        graph.trendSpeed.push(telemetryPoint.speed)
+        graph.trendRpm.push(telemetryPoint.rpm)
+        let formattedTsGraph = `"${dayjs.unix(telemetryPoint.ts).format('HH:mm:ss')}"`; //need ""
+        graph.trendTstamps.push(formattedTsGraph)
+    });
+    ////CODE FOR GRAPH - NOT IMPLEMENTED 
+
     const viewData = {
       title: "trip",
       trip: trip,
@@ -82,10 +115,11 @@ export const tripController = {
       endingLocationLongitude: endingLocationCoords[1],
       speedViolationCounter: speedViolationCounter,
       rpmViolationCounter: rpmViolationCounter,
-      hasComments: hasComments
-      //graph: graph,
+      maxRpm: maxRpm,
+      maxSpeed: maxSpeed,
+      hasComments: hasComments,
+      graph: graph,
     };
-    console.log(telemetry)
     response.render("trip-view", viewData);
   },
 
@@ -96,8 +130,8 @@ export const tripController = {
     };
     //record state set to on
     recordStatus = true
-    telemetryFuncs.recordTelemetry(newTrip.id)
-    console.log(`starting trip ${newTrip.id}`);
+    telemetryFuncs.recordTelemetry(newTrip._id)
+    console.log(`starting trip ${newTrip._id}`);
     response.redirect("/dashboard");
   },
 
@@ -129,17 +163,5 @@ export const tripController = {
     console.log(`Deleting trip ${tripid}`);
     await tripStore.deleteTripById(tripid);
     response.redirect("/dashboard")
-  },
-
-  async editTripName(request, response) {
-    const tripid = request.params.id;
-    const updatedTrip = {
-      name: request.body.name,
-    };
-    console.log(`Updating the name for trip ${tripid}`);
-    const trip = await tripStore.getTripById(tripid);
-    await tripStore.updateTripName(tripid, updatedTrip);
-    ///redirect directly to edited trip
-    response.redirect(`/trip/${tripid}`);
-  },
+  }
 }
