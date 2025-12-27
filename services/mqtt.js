@@ -35,7 +35,7 @@ export let longitude;
 export const statusEmit = new EventEmitter()
 
 ///WSS
-const PORT = process.env.PORT+1
+const PORT = Number(process.env.PORT)+1
  || 8080; //for RENDER deployment
 console.log(process.env.PORT)
 const wss = new WebSocketServer({ port: PORT });
