@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 import { engine } from "express-handlebars";
 import { router } from "./routes.js";
+import { WebSocketServer } from "ws";
 import './services/mqtt.js' // run the MQTT client
 
 const app = express();
@@ -17,6 +18,13 @@ app.set("view engine", ".hbs");
 app.set("views", "./views");
 app.use("/", router);
 
-const listener = app.listen(process.env.PORT || 4000, function () {
+export const listener = app.listen(process.env.PORT || 4000, function () {
   console.log(`Todolist started on http://localhost:${listener.address().port}`);
+  });
+
+//also attaching the WSS to the node server (same port, good for RENDER deployment)
+export const wss = new WebSocketServer({ server: listener });
+wss.on('error', (err) => {
+  console.error('WebSocket server error:', err);
 });
+

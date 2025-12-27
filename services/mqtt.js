@@ -3,6 +3,7 @@ import mqtt from "mqtt";
 import { v4 } from "uuid";
 import { EventEmitter } from 'events';
 import { WebSocketServer } from 'ws';
+import { wss } from "../server.js";
 
 
 
@@ -35,12 +36,9 @@ export let longitude;
 export const statusEmit = new EventEmitter()
 
 ///WSS
-const PORT = Number(process.env.PORT)+1 || 8080; //for RENDER deployment I need a valid port, since the env.PORT is the one for the node server, I find the next one for the WSS
-console.log(PORT)
-const wss = new WebSocketServer({ port: PORT });
-wss.on('error', (err) => {
-  console.error('WebSocket server error:', err);
-});
+//it will not work on Render, structurally I would have to somehow attach it to the same PORT as the Node sever, lost too much time on this, the live dashboard will work on localhost.
+
+
 
 //MQTT
 client.on('connect', () => {
@@ -94,12 +92,13 @@ client.on('error', (err) => {
 });
 
 //function to use the data in controller
-function getTelemetry() {
+export function getTelemetry() {
   return telemetry
 }
 
 ///functions used to record / send telemetry to the controller
 export const telemetryFuncs = {
+
   recordTelemetry() {
     let telemetryBuffer;
     telemetryInterval = setInterval(() => {

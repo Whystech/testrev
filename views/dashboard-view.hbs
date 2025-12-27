@@ -74,7 +74,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gaugeJS/dist/gauge.min.js"></script>
 <script> src = "/scripts/speedGauge.js"</script>
 
-<script type ="module">
+<script>
   ///GAUGES SCRIPT + LIVE ASSIGNMENT OF DATA
   let speedFromMqtt
   let rpmFromMqtt
@@ -134,16 +134,17 @@
   ; // set actual value
 
 
+
+
+////LIVE TELEMETRY DATA/////
 let wsUrl;
-
 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'; //render is https, local is http
-
 if (window.location.hostname === 'rpi'){ //for testing on local network since the hostname of the pi is rpi
-   wsUrl = 'ws://rpi:8080';
+   wsUrl = 'ws://rpi:4000';
 }
 else if(window.location.hostname === 'localhost') {
   // Local
-  wsUrl = 'ws://localhost:8080';
+  wsUrl = 'ws://localhost:4000';
 } else {
   // RENDER
   wsUrl = `${protocol}//${window.location.host}`;
@@ -167,6 +168,7 @@ else if(window.location.hostname === 'localhost') {
   ws.addEventListener("error", err => {
     console.error("WebSocket error:", err);
   })
+
   let marker = null;
   setInterval(function () {
     rpmFromMqtt ??= 0 //avoid undefined text
@@ -177,7 +179,6 @@ else if(window.location.hostname === 'localhost') {
     document.getElementById("actualRpm").innerHTML = rpmFromMqtt
     gauge2.set(rpmFromMqtt)
     gauge1.set(speedFromMqtt)
-    console.log(window.location.host)
   
     currentlocationmap.setView([latFromMqtt, lonFromMqtt], 17)
     if (!marker) {
